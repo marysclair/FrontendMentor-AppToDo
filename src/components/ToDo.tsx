@@ -40,7 +40,7 @@ export function ToDo({
       className={`rounded-md py-4 px-5 flex flex-row items-center border-b last:border-0  ${
         currentMode === Modes.Light
           ? "bg-white border-slate-200"
-          : "bg-slate-700 border-slate-600"
+          : "bg-gray-800 border-slate-600"
       }`}
     >
       <Checkbox

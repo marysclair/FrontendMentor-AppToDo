@@ -162,7 +162,7 @@ export default function Home() {
   return (
     <View
       className={`flex-1 h-screen ${
-        currentMode === Modes.Light ? "bg-gray-200" : "bg-slate-900"
+        currentMode === Modes.Light ? "bg-gray-200" : "bg-gray-950"
       }`}
     >
       <Image
@@ -198,7 +198,7 @@ export default function Home() {
         />
         <View
           className={`rounded-md shadow-lg ${
-            currentMode === Modes.Light ? "bg-white" : "bg-slate-700"
+            currentMode === Modes.Light ? "bg-white" : "bg-gray-800"
           }`}
         >
           <GestureHandlerRootView>
@@ -238,14 +238,14 @@ export default function Home() {
         </View>
         <View
           className={`flex flex-row items-center justify-center space-x-4 py-4 mt-4 rounded-md shadow-2xl ${
-            currentMode === Modes.Light ? "bg-white" : "bg-slate-700"
+            currentMode === Modes.Light ? "bg-white" : "bg-gray-800"
           }`}
         >
           <Pressable onPress={() => updateToDoStatus(ToDoStatus.All)}>
             <Text
               className={`font-title ${
                 toDoFilter === ToDoStatus.All
-                  ? "text-cyan-500"
+                  ? "text-cyan-600"
                   : currentMode === Modes.Light
                   ? "text-slate-400"
                   : "text-slate-500"

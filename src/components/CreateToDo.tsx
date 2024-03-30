@@ -28,12 +28,14 @@ export default function CreateToDo({
   return (
     <View
       className={`flex flex-row items-center px-5 py-3 rounded-md justify-between mb-5 shadow-lg ${
-        currentMode === Modes.Light ? "bg-white" : "bg-slate-700"
+        currentMode === Modes.Light ? "bg-white" : "bg-gray-800"
       }`}
     >
       <TextInput
         value={text}
-        className="w-[85%] font-body"
+        className={`w-[85%] font-body ${
+          currentMode === Modes.Light ? "text-slate-500" : "text-slate-400"
+        }`}
         placeholder="Create a new todo..."
         placeholderTextColor="#94a3b8"
         onChangeText={(e) => onChange(e)}
