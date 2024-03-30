@@ -24,6 +24,8 @@ import {
 import CreateToDo from "../components/CreateToDo";
 import { ToDo } from "../components/ToDo";
 
+import Ionicons from "@expo/vector-icons/Ionicons";
+
 export interface ToDoType {
   id: string;
   title: string;
@@ -36,6 +38,11 @@ enum ToDoStatus {
   Completed,
 }
 
+export enum Modes {
+  Light,
+  Dark,
+}
+
 export default function Home() {
   useFonts({
     JosefinSans_700Bold,
@@ -44,7 +51,7 @@ export default function Home() {
 
   const toDoListExample = [
     { id: "1", title: "Sleep for a long time", checked: false },
-    { id: "2", title: "Kill myself", checked: false },
+    { id: "2", title: "Start new project", checked: false },
     {
       id: "3",
       title: "Bake all the most delicious cakes in the world",
@@ -59,6 +66,8 @@ export default function Home() {
   const [toDoChecked, setToDoChecked] = useState(toDoList.length);
   const [toDoFilter, setToDoFilter] = useState(ToDoStatus.All);
   const [toDoListBackup, setToDoListBackup] = useState<ToDoType[]>(toDoList);
+  const [currentMode, setCurrentMode] = useState<Modes>(Modes.Light);
+
   const ref = useRef(null);
 
   useEffect(() => {
@@ -135,6 +144,7 @@ export default function Home() {
           <ShadowDecorator>
             <TouchableOpacity activeOpacity={1.0} onLongPress={drag}>
               <ToDo
+                currentMode={currentMode}
                 key={item.id}
                 id={item.id}
                 title={item.title}
@@ -150,23 +160,47 @@ export default function Home() {
   };
 
   return (
-    <View className="flex-1 h-screen bg-gray-200">
+    <View
+      className={`flex-1 h-screen ${
+        currentMode === Modes.Light ? "bg-gray-200" : "bg-slate-900"
+      }`}
+    >
       <Image
-        source={require("../images/bg-mobile-light.jpg")}
+        source={
+          currentMode === Modes.Light
+            ? require("../images/bg-mobile-light.jpg")
+            : require("../images/bg-mobile-dark.jpg")
+        }
         width={500}
         height={400}
         className="w-full h-[28vh] absolute"
       />
       <View className="px-6 py-12 font-body">
-        <Text className="text-3xl tracking-widest text-white font-title mb-6">
-          TODO
-        </Text>
+        <View className="flex flex-row items-center mb-6 justify-between">
+          <Text className="text-3xl tracking-widest text-white  font-title">
+            TODO
+          </Text>
+          {currentMode === Modes.Light ? (
+            <Pressable onPress={() => setCurrentMode(Modes.Dark)}>
+              <Ionicons name="moon" size={20} color="white" />
+            </Pressable>
+          ) : (
+            <Pressable onPress={() => setCurrentMode(Modes.Light)}>
+              <Ionicons name="sunny" size={20} color="white" />
+            </Pressable>
+          )}
+        </View>
         <CreateToDo
+          currentMode={currentMode}
           text={toDoText}
           onChange={setToDoText}
           onPress={handleCreateToDo}
         />
-        <View className="bg-white rounded-md shadow-lg">
+        <View
+          className={`rounded-md shadow-lg ${
+            currentMode === Modes.Light ? "bg-white" : "bg-slate-700"
+          }`}
+        >
           <GestureHandlerRootView>
             <DraggableFlatList
               data={toDoList}
@@ -180,20 +214,40 @@ export default function Home() {
             />
           </GestureHandlerRootView>
           <View className="flex flex-row items-center justify-between px-5 py-4">
-            <Text className="text-slate-400 font-body">
+            <Text
+              className={`font-body ${
+                currentMode === Modes.Light
+                  ? "text-slate-400"
+                  : "text-slate-500"
+              }`}
+            >
               {toDoChecked} items left
             </Text>
             <Pressable onPress={() => clearAllTheCheckbox()}>
-              <Text className="text-slate-400 font-body">Clear completed</Text>
+              <Text
+                className={`font-body ${
+                  currentMode === Modes.Light
+                    ? "text-slate-400"
+                    : "text-slate-500"
+                }`}
+              >
+                Clear completed
+              </Text>
             </Pressable>
           </View>
         </View>
-        <View className="bg-white flex flex-row justify-between px-5 py-4 mt-4 rounded-md shadow-lg">
+        <View
+          className={`flex flex-row items-center justify-center space-x-4 py-4 mt-4 rounded-md shadow-2xl ${
+            currentMode === Modes.Light ? "bg-white" : "bg-slate-700"
+          }`}
+        >
           <Pressable onPress={() => updateToDoStatus(ToDoStatus.All)}>
             <Text
               className={`font-title ${
                 toDoFilter === ToDoStatus.All
                   ? "text-cyan-500"
+                  : currentMode === Modes.Light
+                  ? "text-slate-400"
                   : "text-slate-500"
               }`}
             >
@@ -205,6 +259,8 @@ export default function Home() {
               className={`font-title ${
                 toDoFilter === ToDoStatus.Active
                   ? "text-cyan-500"
+                  : currentMode === Modes.Light
+                  ? "text-slate-400"
                   : "text-slate-500"
               }`}
             >
@@ -216,6 +272,8 @@ export default function Home() {
               className={`font-title ${
                 toDoFilter === ToDoStatus.Completed
                   ? "text-cyan-500"
+                  : currentMode === Modes.Light
+                  ? "text-slate-400"
                   : "text-slate-500"
               }`}
             >
@@ -223,7 +281,11 @@ export default function Home() {
             </Text>
           </Pressable>
         </View>
-        <Text className="text-center font-body text-slate-500 my-8">
+        <Text
+          className={`text-center font-body my-8 ${
+            currentMode === Modes.Light ? "text-slate-400" : "text-slate-600"
+          }`}
+        >
           Drag and drop to reorder list
         </Text>
       </View>

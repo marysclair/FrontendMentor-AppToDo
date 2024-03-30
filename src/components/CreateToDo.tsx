@@ -6,16 +6,19 @@ import {
   useFonts,
 } from "@expo-google-fonts/josefin-sans";
 import Ionicons from "@expo/vector-icons/Ionicons";
+import { Modes } from "../screens/Home";
 interface CreateToDoProps {
   text: string;
   onChange: (e: string) => void;
   onPress: () => void;
+  currentMode: Modes;
 }
 
 export default function CreateToDo({
   text,
   onChange,
   onPress,
+  currentMode,
 }: CreateToDoProps) {
   useFonts({
     JosefinSans_700Bold,
@@ -23,10 +26,14 @@ export default function CreateToDo({
   });
 
   return (
-    <View className="flex flex-row items-center bg-white px-5 py-3 rounded-md justify-between mb-5 shadow-lg">
+    <View
+      className={`flex flex-row items-center px-5 py-3 rounded-md justify-between mb-5 shadow-lg ${
+        currentMode === Modes.Light ? "bg-white" : "bg-slate-700"
+      }`}
+    >
       <TextInput
         value={text}
-        className="font-body w-[85%]"
+        className="w-[85%] font-body"
         placeholder="Create a new todo..."
         placeholderTextColor="#94a3b8"
         onChangeText={(e) => onChange(e)}
