@@ -73,32 +73,59 @@ export default function Home() {
   useEffect(() => {
     const completedCount = toDoListBackup.filter((obj) => obj.checked).length;
     setToDoChecked(toDoListBackup.length - completedCount);
+    fetch("http://localhost:8080/todos")
+      .then((res) => res.json())
+      .then((res) => {
+        const toDos = res.map(function (obj: ToDoType) {
+          return {
+            id: obj.id,
+            title: obj.title,
+            checked: obj.checked,
+          };
+        });
+        setToDoList(toDos);
+        setToDoListBackup(toDos);
+      });
   }, [toDoList, toDoFilter]);
 
   function handleCreateToDo() {
     if (toDoText && toDoText.length !== 0) {
-      const toDoObj = {
-        id: uuid.v4() as string,
+      const body = {
         title: toDoText,
-        checked: false,
       };
 
-      setToDoList([...toDoList, toDoObj]);
-      setToDoListBackup([...toDoList, toDoObj]);
+      fetch("http://localhost:8080/todos", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(body),
+      })
+        .then((res) => res.json())
+        .then((res) => {
+          console.log(res);
+        });
+
       setToDoText("");
     }
   }
 
-  function handleToUpdateCheck(id: string) {
-    const updatedToDoList = toDoList.map((obj) => {
-      if (obj.id === id) {
-        return { ...obj, checked: !obj.checked };
-      }
-      return obj;
-    });
+  function handleToUpdateCheck(id: string, newValue: boolean) {
+    const body = {
+      checked: newValue,
+    };
 
-    setToDoList(updatedToDoList);
-    setToDoListBackup(updatedToDoList);
+    fetch(`http://localhost:8080/todos/${id}`, {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(body),
+    })
+      .then((res) => res.json())
+      .then((res) => {
+        console.log(res);
+      });
   }
 
   function clearAllTheCheckbox() {
@@ -127,14 +154,16 @@ export default function Home() {
   }
 
   function deleteToDo(id: string) {
-    const updatedToDoList = toDoList.filter((obj) => {
-      if (obj.id !== id) {
-        return obj;
-      }
-    });
-
-    setToDoList(updatedToDoList);
-    setToDoListBackup(updatedToDoList);
+    fetch(`http://localhost:8080/todos/${id}`, {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
+      .then((res) => res.json())
+      .then((res) => {
+        console.log(res);
+      });
   }
 
   const renderItem = ({ item, drag }: RenderItemParams<ToDoType>) => {

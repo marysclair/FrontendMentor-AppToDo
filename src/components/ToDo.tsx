@@ -10,7 +10,7 @@ import {
 import Ionicons from "@expo/vector-icons/Ionicons";
 
 interface ToDoProps extends ToDoType {
-  updateCheck: (id: string) => void;
+  updateCheck: (id: string, newValue: boolean) => void;
   deleteToDo: (id: string) => void;
   currentMode: Modes;
 }
@@ -30,7 +30,7 @@ export function ToDo({
   const [isChecked, setChecked] = useState(checked);
   const handleCheck = (newValue: boolean) => {
     setChecked(newValue);
-    updateCheck(id);
+    updateCheck(id, newValue);
   };
   useEffect(() => {
     setChecked(checked);
