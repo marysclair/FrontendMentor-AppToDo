@@ -46,4 +46,4 @@ Como um projeto Expo, você pode acessar ele de duas formas: Iniciando um projet
 
 ### Versão Mobile Dark Mode
 
-![](./src/design/solution-dark-light.png)
+![](./src/design/solution-mobile-dark.png)
